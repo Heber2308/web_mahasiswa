@@ -28,33 +28,75 @@ function initSlideshow() {
     setInterval(nextSlide, 4000);
 }
 
+// ================================================================
+// ===== SIDEBAR FUNCTIONS =====
+// ================================================================
+
 // ===== TOGGLE SIDEBAR =====
 function toggleSidebar() {
     const sidebar = document.getElementById('mainSidebar');
     const overlay = document.getElementById('sidebarOverlay');
-    if (sidebar) {
-        sidebar.classList.toggle('show');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+
+    if (!sidebar) {
+        console.warn('Sidebar not found!');
+        return;
     }
-    if (overlay) {
-        overlay.classList.toggle('show');
+
+    if (sidebar.classList.contains('open')) {
+        // Tutup sidebar
+        sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('show');
+        if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        console.log('Sidebar closed');
+    } else {
+        // Buka sidebar
+        sidebar.classList.add('open');
+        if (overlay) overlay.classList.add('show');
+        if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-times"></i>';
+        console.log('Sidebar opened');
     }
 }
 
-// ===== TUTUP SIDEBAR SAAT KLIK DI LUAR (MOBILE) =====
-document.addEventListener('click', function(event) {
+// ===== CLOSE SIDEBAR =====
+function closeSidebar() {
     const sidebar = document.getElementById('mainSidebar');
     const overlay = document.getElementById('sidebarOverlay');
-    const toggleBtn = document.querySelector('.toggle-sidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
 
-    if (window.innerWidth <= 991) {
-        if (sidebar && !sidebar.contains(event.target) && toggleBtn && !toggleBtn.contains(event.target)) {
-            sidebar.classList.remove('show');
-            if (overlay) overlay.classList.remove('show');
+    if (sidebar) {
+        sidebar.classList.remove('open');
+        console.log('Sidebar closed by closeSidebar()');
+    }
+    if (overlay) overlay.classList.remove('show');
+    if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-bars"></i>';
+}
+
+// ===== TUTUP SIDEBAR SAAT TEKAN ESC =====
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeSidebar();
+    }
+});
+
+// ===== TUTUP SIDEBAR SAAT KLIK DI LUAR =====
+document.addEventListener('click', function(event) {
+    const sidebar = document.getElementById('mainSidebar');
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    if (sidebar && sidebar.classList.contains('open')) {
+        // Jika klik di luar sidebar dan di luar tombol
+        if (!sidebar.contains(event.target) && toggleBtn && !toggleBtn.contains(event.target)) {
+            closeSidebar();
         }
     }
 });
 
+// ================================================================
 // ===== SET ACTIVE MENU =====
+// ================================================================
+
 function setActiveMenu(page) {
     const links = document.querySelectorAll('.sidebar-menu .nav-link');
     links.forEach(link => {
@@ -104,6 +146,7 @@ const defaultMatkul = [
     { id: 8, kode: 'MK008', nama: 'Visualisasi Data', jurusan: 'Data Science', semester: 4, sks: 3 }
 ];
 
+// ===== FUNGSI LOCALSTORAGE =====
 function getStoredData(key, defaultData) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : defaultData;
@@ -128,9 +171,13 @@ function updateAllBadges() {
     const badgeDsn = document.getElementById('badgeDosen');
     const badgeMatkul = document.getElementById('badgeMatkul');
 
-    if (badgeMhs) badgeMhs.textContent = getStoredData('dataMahasiswa', defaultMahasiswa).length;
-    if (badgeDsn) badgeDsn.textContent = getStoredData('dataDosen', defaultDosen).length;
-    if (badgeMatkul) badgeMatkul.textContent = getStoredData('dataMatkul', defaultMatkul).length;
+    const mhsCount = getStoredData('dataMahasiswa', defaultMahasiswa).length;
+    const dsnCount = getStoredData('dataDosen', defaultDosen).length;
+    const matkulCount = getStoredData('dataMatkul', defaultMatkul).length;
+
+    if (badgeMhs) badgeMhs.textContent = mhsCount;
+    if (badgeDsn) badgeDsn.textContent = dsnCount;
+    if (badgeMatkul) badgeMatkul.textContent = matkulCount;
 }
 
 // ================================================================
@@ -149,3 +196,5 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('componentsLoaded', function() {
     updateAllBadges();
 });
+
+console.log('App Common loaded!');

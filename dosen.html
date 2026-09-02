@@ -14,7 +14,174 @@
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
-    <link rel="stylesheet" href="assets/css/dashboard.css">
+
+    <style>
+        /* ===== MAIN WRAPPER & CONTENT ===== */
+        .main-wrapper {
+            margin-left: 250px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-content {
+            padding: 25px 30px;
+        }
+
+        /* ===== CONTENT CARDS ===== */
+        .main-content .content-card {
+            background: rgba(15, 23, 42, 0.80);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .main-content .content-card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .main-content .content-card .card-header {
+            background: transparent;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px 20px;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .main-content .content-card .card-header h5 {
+            color: #ffffff !important;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .main-content .content-card .card-header h5 i {
+            color: #60a5fa !important;
+            margin-right: 6px;
+        }
+
+        .main-content .content-card .card-body {
+            padding: 16px 20px;
+        }
+
+        /* ===== TABLES ===== */
+        .main-content .content-card .table {
+            color: #ffffff !important;
+            margin-bottom: 0;
+        }
+
+        .main-content .content-card .table thead th {
+            color: #94a3b8 !important;
+            background: rgba(255, 255, 255, 0.05) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 10px;
+        }
+
+        .main-content .content-card .table tbody td {
+            color: #e2e8f0 !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+            padding: 8px 10px;
+            font-size: 0.85rem;
+            vertical-align: middle;
+        }
+
+        .main-content .content-card .table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.08) !important;
+        }
+
+        .main-content .content-card .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .main-content .content-card .table-striped tbody tr:nth-of-type(odd) {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn-primary { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+        .btn-primary:hover { background: #2563eb; border-color: #2563eb; color: #fff; }
+        .btn-success { background: #10b981; border-color: #10b981; color: #fff; }
+        .btn-success:hover { background: #059669; border-color: #059669; color: #fff; }
+        .btn-warning { background: #f59e0b; border-color: #f59e0b; color: #fff; }
+        .btn-warning:hover { background: #d97706; border-color: #d97706; color: #fff; }
+        .btn-info { background: #06b6d4; border-color: #06b6d4; color: #fff; }
+        .btn-info:hover { background: #0891b2; border-color: #0891b2; color: #fff; }
+        .btn-danger { background: #ef4444; border-color: #ef4444; color: #fff; }
+        .btn-danger:hover { background: #dc2626; border-color: #dc2626; color: #fff; }
+
+        /* ===== MODAL DIALOGS ===== */
+        .modal-content {
+            background: rgba(15, 23, 42, 0.95) !important;
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12) !important;
+            color: #f8fafc;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .modal-header.bg-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+        }
+
+        .modal-header.bg-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+        }
+
+        .modal-body label {
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        .modal-body .form-control {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #f8fafc;
+        }
+
+        .modal-body .form-control:focus {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #3b82f6;
+            color: #f8fafc;
+            box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+        }
+
+        .modal-body select.form-control option {
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        @media (max-width: 991px) {
+            .main-wrapper {
+                margin-left: 0;
+            }
+            .main-content {
+                padding: 15px;
+            }
+            .main-content .content-card .card-body {
+                padding: 14px 16px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .main-content .content-card .card-body {
+                padding: 12px 14px;
+            }
+            .main-content .content-card .table thead th,
+            .main-content .content-card .table tbody td {
+                padding: 6px 8px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -33,7 +200,7 @@
 
             <!-- ===== TOMBOL TAMBAH ===== -->
             <div class="mb-3">
-                <button class="btn btn-success" onclick="bukaModalTambah()">
+                <button class="btn btn-primary" onclick="bukaModalTambah()">
                     <i class="fas fa-plus"></i> Tambah Dosen
                 </button>
             </div>
@@ -73,7 +240,7 @@
     <div class="modal fade" id="modalTambah" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title"><i class="fas fa-user-plus"></i> Tambah Dosen</h5>
                     <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
                 </div>

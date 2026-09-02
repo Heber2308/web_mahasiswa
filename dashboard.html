@@ -5,68 +5,197 @@
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
     <title>Dashboard - Sistem Mahasiswa</title>
 
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+
+    <!-- General CSS Files -->
     <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/modules/fontawesome/css/all.min.css">
+
+    <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
 </head>
 <body>
-    <div id="app">
-        <div class="main-wrapper">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <div class="container">
-                    <a class="navbar-brand" href="#">
-                        <i class="fas fa-user-graduate"></i> Sistem Mahasiswa
-                    </a>
-                    <div class="ml-auto">
-                        <a href="auth-login.html" class="btn btn-danger">
-                            <i class="fas fa-sign-out-alt"></i> Logout
-                        </a>
+
+    <!-- ===== CONTAINER KOMPONEN ===== -->
+    <div id="slideshow-container"></div>
+    <div id="sidebar-container"></div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-wrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div id="header-container"></div>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="main-content">
+
+            <!-- ===== STATISTIK ===== -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                    <div class="stat-card bg-primary">
+                        <div>
+                            <p class="stat-label"><i class="fas fa-users"></i> Total Mahasiswa</p>
+                            <h2 class="stat-number" id="totalMahasiswa">0</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
                     </div>
                 </div>
-            </nav>
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                    <div class="stat-card bg-primary">
+                        <div>
+                            <p class="stat-label"><i class="fas fa-user-tie"></i> Total Dosen</p>
+                            <h2 class="stat-number" id="totalDosen">0</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                    <div class="stat-card bg-primary">
+                        <div>
+                            <p class="stat-label"><i class="fas fa-book"></i> Total Mata Kuliah</p>
+                            <h2 class="stat-number" id="totalMatkul">0</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+                    <div class="stat-card bg-primary">
+                        <div>
+                            <p class="stat-label"><i class="fas fa-university"></i> Total Jurusan</p>
+                            <h2 class="stat-number" id="totalJurusan">0</h2>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <!-- Main Content -->
-            <div class="main-content">
-                <section class="section">
-                    <div class="container mt-4">
-                        <h2>Dashboard</h2>
-                        <p>Selamat datang di Sistem Data Mahasiswa!</p>
+            <!-- ===== TABEL DATA TERBARU ===== -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card content-card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-users"></i> Mahasiswa Terbaru</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Jurusan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelMahasiswaTerbaru"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="card content-card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-user-tie"></i> Dosen Terbaru</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama</th>
+                                            <th>Jurusan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelDosenTerbaru"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="card content-card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-book"></i> Mata Kuliah Terbaru</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-hover mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Mata Kuliah</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabelMatkulTerbaru"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                        <!-- Card Statistik -->
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="card text-white bg-primary mb-3">
-                                    <div class="card-body">
-                                        <h5><i class="fas fa-users"></i> Total Mahasiswa</h5>
-                                        <h2>5</h2>
-                                    </div>
+            <!-- ===== AKTIVITAS & AKSES CEPAT ===== -->
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card content-card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-bell"></i> Aktivitas Terbaru</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush" id="aktivitasList"></ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 mb-4">
+                    <div class="card content-card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-rocket"></i> Akses Cepat</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-2">
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="mahasiswa.html" class="btn btn-info w-100 py-2">
+                                        <i class="fas fa-user-plus"></i> Kelola Mahasiswa
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-white bg-success mb-3">
-                                    <div class="card-body">
-                                        <h5><i class="fas fa-user-tie"></i> Total Dosen</h5>
-                                        <h2>4</h2>
-                                    </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="dosen.html" class="btn btn-info w-100 py-2">
+                                        <i class="fas fa-chalkboard-teacher"></i> Kelola Dosen
+                                    </a>
                                 </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card text-white bg-warning mb-3">
-                                    <div class="card-body">
-                                        <h5><i class="fas fa-book"></i> Total Mata Kuliah</h5>
-                                        <h2>5</h2>
-                                    </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <a href="matakuliah.html" class="btn btn-info w-100 py-2">
+                                        <i class="fas fa-book"></i> Kelola Mata Kuliah
+                                    </a>
+                                </div>
+                                <div class="col-md-3 col-sm-6">
+                                    <button class="btn btn-info w-100 py-2" onclick="alert('Fitur Laporan')">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
+                </div>
             </div>
+
         </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div id="footer-container"></div>
+
     </div>
 
+    <!-- General JS Scripts -->
     <script src="assets/modules/jquery.min.js"></script>
     <script src="assets/modules/popper.js"></script>
     <script src="assets/modules/tooltip.js"></script>
@@ -76,5 +205,8 @@
     <script src="assets/js/stisla.js"></script>
     <script src="assets/js/scripts.js"></script>
     <script src="assets/js/custom.js"></script>
+    <script src="assets/js/app-common.js"></script>
+    <script src="assets/js/load-components.js"></script>
+    <script src="assets/js/page/dashboard.js"></script>
 </body>
 </html>

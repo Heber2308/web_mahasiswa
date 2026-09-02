@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+    <title>Dosen - Sistem Mahasiswa</title>
+
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+
+    <!-- General CSS Files -->
+    <link rel="stylesheet" href="assets/modules/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/modules/fontawesome/css/all.min.css">
+
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+
+    <!-- ===== CONTAINER KOMPONEN ===== -->
+    <div id="slideshow-container"></div>
+    <div id="sidebar-container"></div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="main-wrapper">
+
+        <!-- ===== HEADER ===== -->
+        <div id="header-container"></div>
+
+        <!-- ===== MAIN CONTENT ===== -->
+        <div class="main-content">
+
+            <!-- ===== TOMBOL TAMBAH ===== -->
+            <div class="mb-3">
+                <button class="btn btn-success" onclick="bukaModalTambah()">
+                    <i class="fas fa-plus"></i> Tambah Dosen
+                </button>
+            </div>
+
+            <!-- ===== TABEL ===== -->
+            <div class="card content-card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-table"></i> Daftar Dosen</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>NIDN</th>
+                                    <th>Nama</th>
+                                    <th>Jurusan</th>
+                                    <th>Spesialisasi</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelDosen"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div id="footer-container"></div>
+
+    </div>
+
+    <!-- ===== MODAL TAMBAH ===== -->
+    <div class="modal fade" id="modalTambah" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-user-plus"></i> Tambah Dosen</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="formTambah" onsubmit="return tambahDosen()">
+                        <div class="form-group">
+                            <label>NIDN</label>
+                            <input type="text" class="form-control" id="nidnTambah" placeholder="Masukkan NIDN" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama</label>
+                            <input type="text" class="form-control" id="namaTambah" placeholder="Masukkan nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jurusan</label>
+                            <select class="form-control" id="jurusanTambah" required>
+                                <option value="">-- Pilih --</option>
+                                <option value="Informatika">Informatika</option>
+                                <option value="Sistem Informasi">Sistem Informasi</option>
+                                <option value="Teknik Komputer">Teknik Komputer</option>
+                                <option value="Data Science">Data Science</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Spesialisasi</label>
+                            <input type="text" class="form-control" id="spesialisasiTambah" placeholder="Masukkan spesialisasi" required>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-block">Simpan</button>
+                    </form>
+                    <div id="pesanTambah" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL EDIT ===== -->
+    <div class="modal fade" id="modalEdit" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-warning text-white">
+                    <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Dosen</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEdit" onsubmit="return editDosen()">
+                        <input type="hidden" id="editId">
+                        <div class="form-group">
+                            <label>NIDN</label>
+                            <input type="text" class="form-control" id="editNidn" placeholder="Masukkan NIDN" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama</label>
+                            <input type="text" class="form-control" id="editNama" placeholder="Masukkan nama" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Jurusan</label>
+                            <select class="form-control" id="editJurusan" required>
+                                <option value="">-- Pilih --</option>
+                                <option value="Informatika">Informatika</option>
+                                <option value="Sistem Informasi">Sistem Informasi</option>
+                                <option value="Teknik Komputer">Teknik Komputer</option>
+                                <option value="Data Science">Data Science</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Spesialisasi</label>
+                            <input type="text" class="form-control" id="editSpesialisasi" placeholder="Masukkan spesialisasi" required>
+                        </div>
+                        <button type="submit" class="btn btn-warning btn-block">Update</button>
+                    </form>
+                    <div id="pesanEdit" class="mt-3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- General JS Scripts -->
+    <script src="assets/modules/jquery.min.js"></script>
+    <script src="assets/modules/popper.js"></script>
+    <script src="assets/modules/tooltip.js"></script>
+    <script src="assets/modules/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/modules/nicescroll/jquery.nicescroll.min.js"></script>
+    <script src="assets/modules/moment.min.js"></script>
+    <script src="assets/js/stisla.js"></script>
+    <script src="assets/js/scripts.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="assets/js/app-common.js"></script>
+    <script src="assets/js/load-components.js"></script>
+    <script src="assets/js/page/dosen.js"></script>
+</body>
+</html>

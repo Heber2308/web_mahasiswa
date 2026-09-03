@@ -35,33 +35,85 @@ function updateStatistik() {
 }
 
 // ===== RENDER TABEL =====
+function getDataDashboard() {
+    const pencarian = document.getElementById('pencarianDashboard')?.value.trim().toLowerCase() || '';
+    const pengurutan = document.getElementById('pengurutanDashboard')?.value || 'default';
+    const semuaData = [
+        ...mahasiswa.map(data => ({ ...data, tipe: 'Mahasiswa', identitas: data.nim })),
+        ...dosen.map(data => ({ ...data, tipe: 'Dosen', identitas: data.nidn })),
+        ...matakuliah.map(data => ({ ...data, tipe: 'Mata Kuliah', identitas: data.kode }))
+    ];
+
+    const hasil = semuaData.filter(data => Object.values(data).some(nilai =>
+        String(nilai).toLowerCase().includes(pencarian)
+    ));
+
+    if (pengurutan !== 'default') {
+        const [kolom, arah] = pengurutan.split('-');
+        hasil.sort((a, b) => {
+            const nilaiA = String(a[kolom] || '').toLowerCase();
+            const nilaiB = String(b[kolom] || '').toLowerCase();
+            const perbandingan = nilaiA.localeCompare(nilaiB, 'id', { numeric: true });
+            return arah === 'desc' ? -perbandingan : perbandingan;
+        });
+    }
+
+    return {
+        mahasiswa: hasil.filter(data => data.tipe === 'Mahasiswa'),
+        dosen: hasil.filter(data => data.tipe === 'Dosen'),
+        matakuliah: hasil.filter(data => data.tipe === 'Mata Kuliah'),
+        total: hasil.length
+    };
+}
+
 function renderTabel() {
+    const dataTampil = getDataDashboard();
+    const status = document.getElementById('statusPencarianDashboard');
+    if (status) {
+        status.textContent = dataTampil.total === mahasiswa.length + dosen.length + matakuliah.length
+            ? `Menampilkan ${dataTampil.total} data`
+            : `Menampilkan ${dataTampil.total} data hasil pencarian`;
+    }
+
     // Mahasiswa Terbaru
     let tabelMhs = document.getElementById('tabelMahasiswaTerbaru');
     if (tabelMhs) {
         tabelMhs.innerHTML = '';
-        mahasiswa.slice(-3).reverse().forEach(m => {
-            tabelMhs.innerHTML += `<tr><td>${m.nama}</td><td>${m.jurusan}</td></tr>`;
+        dataTampil.mahasiswa.forEach(m => {
+            tabelMhs.innerHTML += `<tr><td>${m.nama}<small class="d-block text-muted">${m.identitas}</small></td><td>${m.jurusan}</td></tr>`;
         });
+        if (dataTampil.mahasiswa.length === 0) tabelMhs.innerHTML = '<tr><td colspan="2" class="text-center">Tidak ada data</td></tr>';
     }
 
     // Dosen Terbaru
     let tabelDsn = document.getElementById('tabelDosenTerbaru');
     if (tabelDsn) {
         tabelDsn.innerHTML = '';
-        dosen.slice(-3).reverse().forEach(d => {
-            tabelDsn.innerHTML += `<tr><td>${d.nama}</td><td>${d.jurusan}</td></tr>`;
+        dataTampil.dosen.forEach(d => {
+            tabelDsn.innerHTML += `<tr><td>${d.nama}<small class="d-block text-muted">${d.identitas}</small></td><td>${d.jurusan}</td></tr>`;
         });
+        if (dataTampil.dosen.length === 0) tabelDsn.innerHTML = '<tr><td colspan="2" class="text-center">Tidak ada data</td></tr>';
     }
 
     // Mata Kuliah Terbaru
     let tabelMatkul = document.getElementById('tabelMatkulTerbaru');
     if (tabelMatkul) {
         tabelMatkul.innerHTML = '';
-        matakuliah.slice(-3).reverse().forEach(mk => {
-            tabelMatkul.innerHTML += `<tr><td>${mk.kode}</td><td>${mk.nama}</td></tr>`;
+        dataTampil.matakuliah.forEach(mk => {
+            tabelMatkul.innerHTML += `<tr><td>${mk.kode}</td><td>${mk.nama}<small class="d-block text-muted">${mk.jurusan}</small></td></tr>`;
         });
+        if (dataTampil.matakuliah.length === 0) tabelMatkul.innerHTML = '<tr><td colspan="2" class="text-center">Tidak ada data</td></tr>';
     }
+}
+
+function initKontrolDashboard() {
+    ['pencarianDashboard', 'pengurutanDashboard'].forEach(id => {
+        const kontrol = document.getElementById(id);
+        if (!kontrol || kontrol.dataset.terpasang === 'true') return;
+        kontrol.addEventListener('input', renderTabel);
+        kontrol.addEventListener('change', renderTabel);
+        kontrol.dataset.terpasang = 'true';
+    });
 }
 
 // ===== RENDER AKTIVITAS =====
@@ -92,6 +144,7 @@ function renderAktivitas() {
 function initDashboard() {
     setPageTitle('📊 Dashboard', 'Selamat datang di Sistem Data Mahasiswa');
     setActiveMenu('dashboard.html');
+    initKontrolDashboard();
     updateStatistik();
     renderTabel();
     renderAktivitas();

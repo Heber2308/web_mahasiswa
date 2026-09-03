@@ -12,19 +12,54 @@ function updateBadge() {
 }
 
 // ===== RENDER TABEL =====
+function getDataTampil() {
+    const pencarian = document.getElementById('pencarianMahasiswa')?.value.trim().toLowerCase() || '';
+    const jurusan = document.getElementById('filterJurusan')?.value || '';
+    const pengurutan = document.getElementById('pengurutanMahasiswa')?.value || 'default';
+
+    const hasil = mahasiswa.filter(m => {
+        const cocokPencarian = !pencarian || `${m.nim} ${m.nama}`.toLowerCase().includes(pencarian);
+        const cocokJurusan = !jurusan || m.jurusan === jurusan;
+        return cocokPencarian && cocokJurusan;
+    });
+
+    if (pengurutan !== 'default') {
+        const [kolom, arah] = pengurutan.split('-');
+        hasil.sort((a, b) => {
+            const nilaiA = kolom === 'ipk' ? Number(a[kolom]) : String(a[kolom]).toLowerCase();
+            const nilaiB = kolom === 'ipk' ? Number(b[kolom]) : String(b[kolom]).toLowerCase();
+            const perbandingan = nilaiA > nilaiB ? 1 : nilaiA < nilaiB ? -1 : 0;
+            return arah === 'desc' ? -perbandingan : perbandingan;
+        });
+    }
+
+    return hasil;
+}
+
 function renderTabel() {
     let tabel = document.getElementById('tabelMahasiswa');
     if (!tabel) return;
 
     tabel.innerHTML = '';
+    const dataTampil = getDataTampil();
+    const status = document.getElementById('statusFilterMahasiswa');
 
-    if (mahasiswa.length === 0) {
-        tabel.innerHTML = `<tr><td colspan="6" class="text-center">Belum ada data mahasiswa</td></tr>`;
+    if (status) {
+        status.textContent = dataTampil.length === mahasiswa.length
+            ? `Menampilkan ${mahasiswa.length} mahasiswa`
+            : `Menampilkan ${dataTampil.length} dari ${mahasiswa.length} mahasiswa`;
+    }
+
+    if (dataTampil.length === 0) {
+        const pesanKosong = mahasiswa.length === 0
+            ? 'Belum ada data mahasiswa'
+            : 'Data mahasiswa tidak ditemukan';
+        tabel.innerHTML = `<tr><td colspan="6" class="text-center">${pesanKosong}</td></tr>`;
         updateBadge();
         return;
     }
 
-    mahasiswa.forEach((m, index) => {
+    dataTampil.forEach((m, index) => {
         tabel.innerHTML += `
             <tr>
                 <td>${index + 1}</td>
@@ -45,6 +80,16 @@ function renderTabel() {
     });
 
     updateBadge();
+}
+
+function initKontrolTabel() {
+    ['pencarianMahasiswa', 'filterJurusan', 'pengurutanMahasiswa'].forEach(id => {
+        const kontrol = document.getElementById(id);
+        if (!kontrol || kontrol.dataset.terpasang === 'true') return;
+        kontrol.addEventListener('input', renderTabel);
+        kontrol.addEventListener('change', renderTabel);
+        kontrol.dataset.terpasang = 'true';
+    });
 }
 
 // ===== TAMBAH MAHASISWA =====
@@ -141,6 +186,7 @@ function hapusMahasiswa(id) {
 function initMahasiswa() {
     setPageTitle('👨‍🎓 Data Mahasiswa', 'Kelola data mahasiswa');
     setActiveMenu('mahasiswa.html');
+    initKontrolTabel();
     renderTabel();
 }
 
